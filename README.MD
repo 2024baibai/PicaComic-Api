@@ -5,9 +5,9 @@
 
 ## 功能
 
--[x] 获取用户信息(PicaUserApi)  
--[x] 获取本子信息(BookApi)  
--[ ] 搜索  
+- [x] 获取用户信息(PicaUserApi)  
+- [x] 获取本子信息(BookApi)  
+- [ ] 搜索(尚未完成)  
 
 
 ## 说明

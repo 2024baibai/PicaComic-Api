@@ -5,9 +5,9 @@
 
 ## 功能
 
--[x] 获取用户信息(PicaUserApi)
--[x] 获取本子信息(BookApi)
--[ ] 搜索
+-[x] 获取用户信息(PicaUserApi)  
+-[x] 获取本子信息(BookApi)  
+-[ ] 搜索  
 
 
 ## 说明
@@ -61,7 +61,7 @@ bookApi.getBookDetail("5a6954608d7d24559d8a42be");
 
 未来更新其他接口使用样例
 
-##样例：
+##  样例：
 获取自己喜欢的所有本子并下载
 ```java
 

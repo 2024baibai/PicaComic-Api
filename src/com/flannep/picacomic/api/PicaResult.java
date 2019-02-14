@@ -1,16 +1,17 @@
 package com.flannep.picacomic.api;
 
+import com.flannep.picacomic.api.util.NetUtil;
 import net.sf.json.JSONObject;
 
 /**
- * 代表pica服务器返回的json
+ * 代表pica服务器返回的请求结果对象
  */
 public class PicaResult {
 
     private JSONObject result;
 
     /**
-     * 使用网页返回的json构建一个PicaResult对象
+     * 使用哔咔服务器返回的json构造一个PicaResult对象
      *
      * @param webJson
      */
@@ -18,11 +19,32 @@ public class PicaResult {
         result = webJson;
     }
 
+    /**
+     * 静态方法，获取pica请求结果
+     *
+     * @param header pica标准请求头
+     * @return
+     * @throws Exception 仅当无法解析网页内容时抛出异常
+     */
+    public static PicaResult getPicaResult(PicaHeader header) throws Exception {
+        String webContent = NetUtil.sendGet(header, true);
+        return new PicaResult(JSONObject.fromObject(webContent));
+    }
 
+    /**
+     * 获取http状态码
+     *
+     * @return
+     */
     public int getCode() {
         return result.getInt("code");
     }
 
+    /**
+     * 判断请求是否出现错误
+     *
+     * @return
+     */
     public boolean hasError() {
         return result.containsKey("error");
     }
@@ -65,24 +87,6 @@ public class PicaResult {
         }
         return null;
     }
-
-    /**
-     * 静态方法，获取pica请求结果
-     *
-     * @param header pica标准请求头
-     * @return
-     * @throws Exception 仅当无法解析网页内容时抛出异常
-     */
-    public static PicaResult getPicaResult(PicaHeader header) throws Exception {
-        String webContent = NetUtil.sendGet(header, true);
-        PicaResult pr = new PicaResult(JSONObject.fromObject(webContent));
-
-/*        if (pr.hasError()) {
-            throw new IllegalStateException("访问错误:\n" + pr.getMessage());
-        }*/
-        return pr;
-    }
-
 
     @Override
     public String toString() {

@@ -4,7 +4,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * 代表每本本子的缩略信息
+ * 代表每本本子的简单信息
  */
 public class BookSimpleInfo {
 
@@ -13,6 +13,7 @@ public class BookSimpleInfo {
     /**
      * 构造函数
      * 应当是comic键的value
+     *
      * @param comic
      */
     public BookSimpleInfo(JSONObject comic) {
@@ -143,10 +144,11 @@ public class BookSimpleInfo {
 
     /**
      * 获取文件封面信息
+     *
      * @return
      */
-    public Media getThumb(){
-        if (comic.containsKey("thumb")){
+    public Media getThumb() {
+        if (comic.containsKey("thumb")) {
             return new Media(comic.getJSONObject("thumb"));
         }
         return null;

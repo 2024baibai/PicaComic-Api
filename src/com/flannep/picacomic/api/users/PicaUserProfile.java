@@ -6,13 +6,13 @@ import net.sf.json.JSONObject;
  * 代表一个用户的个人信息
  * 注意：资料分为自己的资料和他人的资料
  * 他人的资料包含较多信息，但不包含签到
- * 自己的资料信息较少，包含签到
+ * 自己的资料信息较少，包含签到信息
  */
-public class UserProfile {
+public class PicaUserProfile {
 
     private JSONObject user;
 
-    public UserProfile(JSONObject data) {
+    public PicaUserProfile(JSONObject data) {
         if (data.containsKey("user")) {
             this.user = data.getJSONObject("user");
         } else {

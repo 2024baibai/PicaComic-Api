@@ -1,17 +1,17 @@
-package com.flannep.picacomic.api.users;
+package com.flannep.picacomic.api.book;
 
-import com.flannep.picacomic.api.book.BookSimpleInfo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * 代表我喜欢的本子
+ * 代表请求页的返回列表
+ * 包括：我喜欢的本子列表，搜索的本子列表
  */
-public class MyFavorite {
+public class PicaBookResult {
 
     private JSONObject comic;
 
-    MyFavorite(JSONObject data) {
+    public PicaBookResult(JSONObject data) {
         if (!data.containsKey("comics")) {
             throw new IllegalArgumentException("非法的构造函数:\n" + data.toString());
         }
@@ -76,7 +76,7 @@ public class MyFavorite {
 
             JSONArray docs = comic.getJSONArray("docs");
             BookSimpleInfo[] books = new BookSimpleInfo[docs.size()];
-            for (int i = 0; i <docs.size() ; i++) {
+            for (int i = 0; i < docs.size(); i++) {
                 books[i] = new BookSimpleInfo(docs.getJSONObject(i));
             }
             return books;

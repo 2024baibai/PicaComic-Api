@@ -1,16 +1,13 @@
 package com.flannep.test;
 
-import com.flannep.picacomic.api.FileUtil;
-import com.flannep.picacomic.api.NetUtil;
+
 import com.flannep.picacomic.api.PicaHeader;
 import com.flannep.picacomic.api.PicaLogin;
-import com.flannep.picacomic.api.book.BookApi;
-import com.flannep.picacomic.api.book.BookDetail;
-import com.flannep.picacomic.api.book.BookPage;
-import com.flannep.picacomic.api.book.Media;
+import com.flannep.picacomic.api.book.*;
 import com.flannep.picacomic.api.book.episode.EpisodeInfo;
-import com.flannep.picacomic.api.users.MyFavorite;
 import com.flannep.picacomic.api.users.PicaUserApi;
+import com.flannep.picacomic.api.util.FileUtil;
+import com.flannep.picacomic.api.util.NetUtil;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -19,16 +16,27 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        String username = "xxx";
-        String password = "xxxx";
+        String username = "123456789@qq.com";
+        String password = "123456789";
 
         //登陆，authorization可以保存一段时间（大约1周？退出登录不影响）
         String authorization = new PicaLogin(username, password).login();
         //用户Api
         PicaUserApi puApi = new PicaUserApi(authorization);
+
+        PicaBookResult result = puApi.getMyFavorite(1);
+
+        int page = result.getPages();
+        for (int i = 1; i <= page; i++) {
+            result = puApi.getMyFavorite(i);
+            for (BookSimpleInfo info : result.getBooks()) {
+                System.out.println(info.getTitle());
+            }
+        }
+
         //目录必须存在
         //下载所有喜欢的本子样例
-        downloadAllFavorite(puApi, authorization, "C:/Users/用户/Desktop/喜欢的本子");
+        //downloadAllFavorite(puApi, authorization, "C:/Users/用户/Desktop/喜欢的本子");
 
     }
 
@@ -84,7 +92,7 @@ public class Main {
      */
     public static void downloadAllFavorite(PicaUserApi puApi, String authorization, String path) throws Exception {
         //获取我喜欢的本子，由于不知道总页码，先获取第一页
-        MyFavorite favo = puApi.getMyFavorite(1);
+        PicaBookResult favo = puApi.getMyFavorite(1);
         //获取到页码后遍历每一页
         for (int i = 1; i <= favo.getPages(); i++) {
             System.out.println("\n总页码下载进度:");
@@ -96,8 +104,8 @@ public class Main {
                 System.out.println("\n\t本页本子下载进度:");
                 printProgressBar(j, booksLenth, 1);
                 //获取本子的详细信息
-                BookApi bapi = new BookApi(authorization);
-                BookDetail binfo = bapi.getBookDetail(favo.getBooks()[j].get_ID());
+                PicaBookApi bapi = new PicaBookApi(authorization);
+                BookDetailInfo binfo = bapi.getBookDetail(favo.getBooks()[j].get_ID());
                 System.out.println("\n\t当前下载: " + binfo.getTitle());
                 System.out.println("\t分类:" + Arrays.toString(binfo.getCategories()));
                 System.out.println("\t标签:" + Arrays.toString(binfo.getTags()));

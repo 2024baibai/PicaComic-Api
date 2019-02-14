@@ -1,5 +1,6 @@
-package com.flannep.picacomic.api;
+package com.flannep.picacomic.api.util;
 
+import com.flannep.picacomic.api.PicaHeader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -12,9 +13,21 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 网络操作工具
+ *
+ * @author FlanN
+ */
 public class NetUtil {
 
-
+    /**
+     * 发送get请求
+     *
+     * @param header         哔咔请求头
+     * @param convertUnicode 是否将结果的unicode字符转为中文
+     * @return
+     * @throws Exception
+     */
     public static String sendGet(PicaHeader header, boolean convertUnicode) throws Exception {
         return sendGet(header.getUrl(), header.getHttpHeader(), convertUnicode);
     }
@@ -22,9 +35,13 @@ public class NetUtil {
     /**
      * 发送get请求
      *
-     * @return
+     * @param url            目标URL
+     * @param header         请求头
+     * @param convertUnicode 是否将结果的unicode字符转为中文
+     * @return 返回网页内容
+     * @throws Exception
      */
-    public static String sendGet(String url, Map<String, String> header, boolean convertUnicode) throws Exception {
+    private static String sendGet(String url, Map<String, String> header, boolean convertUnicode) throws Exception {
         StringBuilder sb = new StringBuilder();
         BufferedReader in = null;
         URL urls = new URL(url);
@@ -75,17 +92,30 @@ public class NetUtil {
         return sb.toString();
     }
 
-
+    /**
+     * 发送post请求
+     *
+     * @param header         哔咔请求头
+     * @param param          post请求提交的数据
+     * @param convertUnicode 结果unicode转换为中文
+     * @return 网页内容
+     * @throws Exception
+     */
     public static String sendPost(PicaHeader header, String param, boolean convertUnicode) throws Exception {
         return sendPost(header.getUrl(), header.getHttpHeader(), param, convertUnicode);
     }
 
     /**
-     * 向指定 URL 发送POST方法的请求
+     * 发送post请求
      *
-     * @return 所代表远程资源的响应结果
+     * @param url            目标url
+     * @param header         请求头
+     * @param param          提交的数据
+     * @param convertUnicode 将结果unicode转换为中文
+     * @return 返回网页数据
+     * @throws Exception
      */
-    public static String sendPost(String url, Map<String, String> header, String param, boolean convertUnicode) throws Exception {
+    private static String sendPost(String url, Map<String, String> header, String param, boolean convertUnicode) throws Exception {
         PrintWriter out = null;
         BufferedReader in = null;
         StringBuilder sb = new StringBuilder();
@@ -97,7 +127,6 @@ public class NetUtil {
         if (header != null) {
             // 设置通用的请求属性
             for (String key : header.keySet()) {
-                //System.out.println("添加请求头" + key + " | " + header.get(key));
                 conn.setRequestProperty(key, header.get(key));
             }
         }
@@ -145,12 +174,26 @@ public class NetUtil {
         return sb.toString();
     }
 
-
+    /**
+     * 获取图片文件数据
+     *
+     * @param header 哔咔请求头
+     * @return
+     * @throws Exception
+     */
     public static byte[] getFile(PicaHeader header) throws Exception {
         return getFile(header.getUrl(), header.getHttpHeader());
     }
 
-    public static byte[] getFile(String url, Map<String, String> header) throws Exception {
+    /**
+     * 获取二进制文件数据
+     *
+     * @param url    目标url
+     * @param header 请求头
+     * @return 目标文件数据
+     * @throws Exception
+     */
+    private static byte[] getFile(String url, Map<String, String> header) throws Exception {
         /*return IOUtils.toByteArray(new URL(url));*/
 
         URL urls = new URL(url);
@@ -180,7 +223,7 @@ public class NetUtil {
      * @author yutao
      * @date 2017年1月24日上午10:33:25
      */
-    public static String unicodeToString(String str) {
+    private static String unicodeToString(String str) {
         Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
         Matcher matcher = pattern.matcher(str);
         char ch;

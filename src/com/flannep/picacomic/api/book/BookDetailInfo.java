@@ -1,21 +1,22 @@
 package com.flannep.picacomic.api.book;
 
-import com.flannep.picacomic.api.users.UserProfile;
+import com.flannep.picacomic.api.users.PicaUserProfile;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
  * 代表每一本本子的详细信息
  */
-public class BookDetail extends BookSimpleInfo {
+public class BookDetailInfo extends BookSimpleInfo {
 
     private JSONObject comic;
 
     /**
      * 应当是comic键中的value
+     *
      * @param comic
      */
-    BookDetail(JSONObject comic) {
+    BookDetailInfo(JSONObject comic) {
         super(comic);
         this.comic = comic;
     }
@@ -26,9 +27,9 @@ public class BookDetail extends BookSimpleInfo {
      *
      * @return
      */
-    public UserProfile getCreator() {
+    public PicaUserProfile getCreator() {
         if (comic.containsKey("_creator")) {
-            return new UserProfile(comic.getJSONObject("_creator"));
+            return new PicaUserProfile(comic.getJSONObject("_creator"));
         }
         return null;
     }

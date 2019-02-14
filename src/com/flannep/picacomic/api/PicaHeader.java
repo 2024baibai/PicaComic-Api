@@ -72,7 +72,9 @@ public class PicaHeader {
      */
     private String contentType = null;
 
-
+    /**
+     * 用户代理
+     */
     private String user_agent = null;
 
     private String host = null;
@@ -80,24 +82,28 @@ public class PicaHeader {
 
     private String accept_encoding = null;
 
-    /**
-     * 代表请求的模式
-     */
-    public enum Method {
-        /**
-         * GET请求
-         */
-        GET,
-        /**
-         * POST请求
-         */
-        POST;
-
-
-
-    }
     public PicaHeader() {
 
+    }
+
+    private static String HMACSHA256(byte[] data, byte[] key) throws NoSuchAlgorithmException, InvalidKeyException {
+        SecretKeySpec signingKey = new SecretKeySpec(key, "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(signingKey);
+        return byte2hex(mac.doFinal(data));
+    }
+
+    private static String byte2hex(byte[] b) {
+        StringBuilder hs = new StringBuilder();
+        String stmp;
+        for (int n = 0; b != null && n < b.length; n++) {
+            stmp = Integer.toHexString(b[n] & 0XFF);
+            if (stmp.length() == 1) {
+                hs.append('0');
+            }
+            hs.append(stmp);
+        }
+        return hs.toString();
     }
 
     /**
@@ -137,24 +143,19 @@ public class PicaHeader {
             if (host != null) {
                 header.put("Host", getHost());
             }
-            if (connection!=null){
-                header.put("Connection",getConnection());
+            if (connection != null) {
+                header.put("Connection", getConnection());
             }
-            if (accept_encoding!=null){
-                header.put("Accept-Encoding",accept_encoding);
+            if (accept_encoding != null) {
+                header.put("Accept-Encoding", accept_encoding);
             }
 
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return header;
     }
-
 
     /**
      * 获取签名
@@ -170,28 +171,6 @@ public class PicaHeader {
         url = url.toLowerCase();
         return HMACSHA256(url.getBytes(), getSecret_key().getBytes());
     }
-
-
-    private static String HMACSHA256(byte[] data, byte[] key) throws NoSuchAlgorithmException, InvalidKeyException {
-        SecretKeySpec signingKey = new SecretKeySpec(key, "HmacSHA256");
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(signingKey);
-        return byte2hex(mac.doFinal(data));
-    }
-
-    private static String byte2hex(byte[] b) {
-        StringBuilder hs = new StringBuilder();
-        String stmp;
-        for (int n = 0; b != null && n < b.length; n++) {
-            stmp = Integer.toHexString(b[n] & 0XFF);
-            if (stmp.length() == 1) {
-                hs.append('0');
-            }
-            hs.append(stmp);
-        }
-        return hs.toString();
-    }
-
 
     public String getSecret_key() {
         return secret_key;
@@ -318,13 +297,25 @@ public class PicaHeader {
         this.connection = connection;
     }
 
-
-
     public String getAccept_encoding() {
         return accept_encoding;
     }
 
     public void setAccept_encoding(String accept_encoding) {
         this.accept_encoding = accept_encoding;
+    }
+
+    /**
+     * 代表请求的模式
+     */
+    public enum Method {
+        /**
+         * GET请求
+         */
+        GET,
+        /**
+         * POST请求
+         */
+        POST
     }
 }

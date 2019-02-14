@@ -1,7 +1,11 @@
 package com.flannep.picacomic.api;
 
+import com.flannep.picacomic.api.util.NetUtil;
 import net.sf.json.JSONObject;
 
+/**
+ * 代表哔咔漫画登录类
+ */
 public class PicaLogin {
 
     /**
@@ -38,8 +42,10 @@ public class PicaLogin {
         param.put("email", username);
         param.put("password", password);
 
-        PicaResult result = new PicaResult(
-                JSONObject.fromObject(NetUtil.sendPost(header, param.toString(), true)));
+        PicaResult result =
+                new PicaResult(
+                        JSONObject.fromObject(
+                                NetUtil.sendPost(header, param.toString(), true)));
         //有错误就抛出异常
         if (result.hasError()) {
             String errMsg = result.getMessage();

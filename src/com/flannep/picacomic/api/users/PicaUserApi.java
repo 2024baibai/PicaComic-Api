@@ -1,8 +1,10 @@
 package com.flannep.picacomic.api.users;
 
-import com.flannep.picacomic.api.NetUtil;
+
 import com.flannep.picacomic.api.PicaHeader;
 import com.flannep.picacomic.api.PicaResult;
+import com.flannep.picacomic.api.book.PicaBookResult;
+import com.flannep.picacomic.api.util.NetUtil;
 import net.sf.json.JSONObject;
 
 /**
@@ -29,7 +31,7 @@ public class PicaUserApi {
      * @return
      * @throws Exception 访问出现严重错误时抛出任何异常
      */
-    public MyFavorite getMyFavorite(int page) throws Exception {
+    public PicaBookResult getMyFavorite(int page) throws Exception {
         PicaHeader header = new PicaHeader();
         header.setUrl(String.format("https://picaapi.picacomic.com/users/favourite?page=%d", page));
         header.setAuthorization(authorization);
@@ -43,13 +45,13 @@ public class PicaUserApi {
             throw new IllegalAccessException("[错误]无法处理的异常:\n" + result.toString());
         }
 
-        return new MyFavorite(result.getData());
+        return new PicaBookResult(result.getData());
     }
 
 
     /**
      * 签到
-     * 注意，重复签到服务器都会返回成功，但是不会加经验。
+     * 注意，重复签到服务器都会返回签到成功，但是不会加经验。
      *
      * @return
      */
@@ -71,7 +73,7 @@ public class PicaUserApi {
      * @return
      * @throws Exception
      */
-    public UserProfile getMyProfile(boolean othersView) throws Exception {
+    public PicaUserProfile getMyProfile(boolean othersView) throws Exception {
 
         if (othersView) {
             return getUserProfile(null);
@@ -81,7 +83,7 @@ public class PicaUserApi {
         header.setAuthorization(authorization);
         header.setUrl("https://picaapi.picacomic.com/users/profile");
         PicaResult pr = PicaResult.getPicaResult(header);
-        return new UserProfile(pr.getData());
+        return new PicaUserProfile(pr.getData());
 
     }
 
@@ -93,7 +95,7 @@ public class PicaUserApi {
      * @param targetID 如果ID为空，则返回自己的个人资料，注意不是显示的ID（昵称），是用户的内部ID
      * @return
      */
-    public UserProfile getUserProfile(String targetID) throws Exception {
+    public PicaUserProfile getUserProfile(String targetID) throws Exception {
 
         PicaHeader header = new PicaHeader();
         if (targetID == null) {
@@ -111,14 +113,14 @@ public class PicaUserApi {
 
         //如果是查询自己的，就将自己的ID传入，递归获取
         if (targetID == null) {
-            targetID = new UserProfile(picaResult.getData()).getID();
+            targetID = new PicaUserProfile(picaResult.getData()).getID();
             if (targetID == null) {
                 throw new IllegalArgumentException("[错误]无法处理的异常：无法获取到用户ID。\n" + picaResult.toString());
             }
             return getUserProfile(targetID);
         }
 
-        return new UserProfile(picaResult.getData());
+        return new PicaUserProfile(picaResult.getData());
     }
 
 

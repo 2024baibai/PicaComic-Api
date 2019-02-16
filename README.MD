@@ -1,7 +1,8 @@
 # PicaComic-Api
-哔咔漫画的Api，基本实现了大部分常用接口
 
------
+哔咔漫画的Api，基本实现了大部分常用接口  
+如果您喜欢本项目，欢迎Star/Fork~ QwQ  
+
 ## 已实现的接口
 - 用户信息
     - 登陆 
@@ -77,10 +78,10 @@ String authStr = loginApi.login();
 
 <span id="PicaHeader和PicaResult"></span>
 ## PicaHeader和PicaResult 
-PicaHeader(哔咔标准请求头) 和 PicaResult(哔咔请求结果) 
-哔咔的请求头数量极多，``PicaHeader``为哔咔请求头的封装类，以下称为**哔咔标准请求头**
-各个Api已经封装了此请求头，基本无需自行构建。
-由于篇幅关系，仅说明几个重要的请求头
+PicaHeader(哔咔标准请求头) 和 PicaResult(哔咔请求结果)   
+哔咔的请求头数量极多，``PicaHeader``为哔咔请求头的封装类，以下称为**哔咔标准请求头**  
+各个Api已经封装了此请求头，基本无需自行构建。  
+由于篇幅关系，仅说明几个重要的请求头  
 
 1. **authorization** 为登陆后返回的身份验证字段，也是各个API的构造函数参数，几乎所有请求都需要此字段。
 2. **time** 请求的时间戳，单位秒，与北京时间相差不得大于300秒，否则会提示时间戳过期。
@@ -538,8 +539,6 @@ for(Media md :page.getPics()){
 
 ## 注意事项
 本项目仅供学习使用，请勿用于非法用途。如有任何问题，欢迎联系: [Shirosaki@flannep.com][1]
-如果您喜欢本项目，欢迎Star/Fork~ QwQ
-
 
 
 
